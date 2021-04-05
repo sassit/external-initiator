@@ -161,6 +161,10 @@ func (client Client) prepareSubscription(rawSub *Subscription) (*Subscription, e
 		if err := client.db.Model(&sub).Related(&sub.Agoric).Error; err != nil {
 			return nil, err
 		}
+	case "zilliqa":
+		if err := client.db.Model(&sub).Related(&sub.Zilliqa).Error; err != nil {
+			return nil, err
+		}
 	}
 
 	return &sub, nil
@@ -302,6 +306,7 @@ type Subscription struct {
 	Keeper            KeeperSubscription
 	BSNIrita          BSNIritaSubscription
 	Agoric            AgoricSubscription
+	Zilliqa           ZilSubscription
 }
 
 type EthSubscription struct {
@@ -366,4 +371,11 @@ type BSNIritaSubscription struct {
 type AgoricSubscription struct {
 	gorm.Model
 	SubscriptionId uint
+}
+
+type ZilSubscription struct {
+	gorm.Model
+	SubscriptionId uint
+	ServiceName    string
+	Accounts       SQLStringArray
 }
